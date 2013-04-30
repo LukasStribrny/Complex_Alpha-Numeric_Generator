@@ -23,12 +23,12 @@ have is:
     $next_number = anderson_makiyama_get_next_alphanumeric($current_number);
 
 
-[examples]: http://github.com/sequential-alphanumeric-generator/example.php
+[examples]: http://github.com/admiyn/sequential-alphanumeric-generator/example.php
 
 
 
 Report Issues/Bugs
 ===============
-[Bugs](http://fazer-site.net/como-fazer-encurtador-de-url-com-php)
+[Bugs and Questions](http://fazer-site.net/como-fazer-encurtador-de-url-com-php)
 
-[Questions](http://fazer-site.net/como-fazer-encurtador-de-url-com-php)
+[Contact](http://fazer-site.net)
