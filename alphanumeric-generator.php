@@ -6,14 +6,14 @@ function anderson_makiyama_get_next_alphanumeric($code){
 	
 	$code_array = str_split($code);
 	
-	//Inicia uma busca pelo prÛximo caractere passÌvel de incremento, ou seja, diferente de Z
-	//Note que inicia do ˙ltimo caractere para o primeiro
+	//Inicia uma busca pelo pr√≥ximo caractere pass√≠vel de incremento, ou seja, diferente de Z
+	//Note que inicia do √∫ltimo caractere para o primeiro
 	for($i = count($code_array)-1;$i>-1;$i--){
 		
 		if($code_array[$i] == "Z"){
 		
 			if($i==0){
-				//Se for igual a Z e for o primeiro caractere, ent„o aumenta o comprimento e zera
+				//Se for igual a Z e for o primeiro caractere, ent√£o aumenta o comprimento e zera
 				
 				$code_array = array_fill(0,count($code_array) + 1,0);
 				
@@ -24,7 +24,7 @@ function anderson_makiyama_get_next_alphanumeric($code){
 				
 				if($code_array[$i -1] != 'Z'){
 					//Se o caractere anterior for diferente de Z, incrementa-o e zera o atual e os subsequentes
-					//Se o caractere anterior for o primeiro, tambÈm funciona, pois incrementa ele e zera os demais
+					//Se o caractere anterior for o primeiro, tamb√©m funciona, pois incrementa ele e zera os demais
 					
 					$code_array[$i -1] = $chars[array_search($code_array[$i -1],$chars) + 1];
 					
@@ -41,12 +41,12 @@ function anderson_makiyama_get_next_alphanumeric($code){
 			}
 		
 		}else{
-				//calcula o prÛximo caractere, ou seja, incrementa o atual
+				//calcula o pr√≥ximo caractere, ou seja, incrementa o atual
 				
 				$code_array[$i] = $chars[array_search($code_array[$i],$chars) + 1];
 
 				if($i == 0){
-					//Se for o primeiro caractere, significa que os demais s„o z
+					//Se for o primeiro caractere, significa que os demais s√£o z
 					//Ou seja, zera eles
 					
 					$novo_array = array_fill(0,count($code_array),0);
