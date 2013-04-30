@@ -23,7 +23,7 @@ have is:
     $next_number = anderson_makiyama_get_next_alphanumeric($current_number);
 
 
-[examples]: http://github.com/admiyn/sequential-alphanumeric-generator/example.php
+[examples]: https://github.com/admiyn/sequential-alphanumeric-generator/blob/master/examplo.php
 
 
 
