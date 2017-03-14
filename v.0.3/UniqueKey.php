@@ -8,7 +8,7 @@ class UniqueKey {
 	protected $code_max_type = 8;
 	
 	public function __construct(){
-		
+		set_time_limit(0);
 	}
 	
 	public function SetLength($SetLength=FALSE){
@@ -18,7 +18,7 @@ class UniqueKey {
 	}
 	
 	public function SetType($SetType=FALSE){
-		if(is_numeric($SetType) AND $SetType>=2 AND $this->code_max_type>=$SetType){
+		if(is_numeric($SetType) AND $this->code_max_type>=$SetType){
 			$this->default_code_type = $SetType;
 		}
 	}
@@ -85,6 +85,7 @@ class UniqueKey {
 		$CodeTypes[8]['code_max_number'] = $this->CodeCountRange($CodeTypes[8]['code_char_range']);
 		
 		$this->CodeType = $CodeTypes[$this->default_code_type];
+		return $CodeTypes;
 	}
 	
 	public function CodeInput($CodeInput=''){
@@ -102,40 +103,38 @@ class UniqueKey {
 	$code_char_range_start = reset($code_char_range);
 	$code_char_range_end = end($code_char_range);
 	
-    $chars = $this->CodeType['code_char_range'];
+	$code_str_split = str_split($this->CodeInputOld);
 	
-	$code_array = str_split($this->CodeInputOld);
-	
-	// Starts a search for the next incrementable character, ie, other than Z
+	// Starts a search for the next incrementable character, ie, other than code_char_range_end
 	// Note that it starts from the last character for the first character
-		for($i = count($code_array)-1;$i>-1;$i--){
-			if($code_array[$i] == $code_char_range_end){
+		for($i = count($code_str_split)-1;$i>-1;$i--){
+			if($code_str_split[$i] == $code_char_range_end){
 				if($i==0){
-				// If it is equal to Z and is the first character, then it increases the length and zera
-				$code_array = array_fill(0,count($code_array) + 1,0);
-				return $code_array;
+				// If it is equal to code_char_range_end and is the first character, then it increases the length and zera
+				$code_str_split = array_fill(0,count($code_str_split) + 1,0);
+				return $code_str_split;
 				}else{
-					if($code_array[$i -1] != $code_char_range_end){
-					// If the previous character is different from Z, it increments it and clears the current and subsequent characters
+					if($code_str_split[$i -1] != $code_char_range_end){
+					// If the previous character is different from code_char_range_end, it increments it and clears the current and subsequent characters
 					// If the previous character is the first one, it also works, because it increments it and zeroes the others
-					$code_array[$i -1] = $chars[array_search($code_array[$i -1],$chars) + 1];
-						for($j = $i; $j < count($code_array); $j++){
-							$code_array[$j] = 0;
+					$code_str_split[$i -1] = $code_char_range[array_search($code_str_split[$i -1],$code_char_range) + 1];
+						for($j = $i; $j < count($code_str_split); $j++){
+							$code_str_split[$j] = $code_char_range_start;
 						}
-					return $code_array;
+					return $code_str_split;
 					}
 				}
 			}else{
 			// calculates the next character, ie, increments the current character
-			$code_array[$i] = $chars[array_search($code_array[$i],$chars) + 1];
+			$code_str_split[$i] = $code_char_range[array_search($code_str_split[$i],$code_char_range) + 1];
 				if($i == 0){
-					// If it is the first character, it means that the others are z
+					// If it is the first character, it means that the others are code_char_range_end
 					// That is, he zeroes them
-					$novo_array = array_fill(0,count($code_array),0);
-					$novo_array[0] = $code_array[$i];
-					$code_array = $novo_array;
+					$novo_array = array_fill(0,count($code_str_split),0);
+					$novo_array[0] = $code_str_split[$i];
+					$code_str_split = $novo_array;
 				}
-			return $code_array;
+			return $code_str_split;
 			}
 		}
 	}
@@ -175,7 +174,7 @@ class UniqueKey {
         $this->code_pos_num = ($number+1);
 	}
 	
-	public function Generate(){
+	public function Generate_String(){
 		$this->CodeTypes();
 		$this->CodeCreate();
 		$this->CodeCountNumber();
@@ -194,6 +193,21 @@ class UniqueKey {
 					'code_max_type'=>$this->code_max_type,
 					'code_length'=>$this->default_code_length
 					);
+	}
+	
+	public function Generate_ID($GenerateID){
+		is_numeric($GenerateID) OR die('The ID must be numberic!');
+		for($i=1;$i<=$GenerateID;$i++){
+			if($i==1){
+				$this->CodeInput();
+			}else{
+				$this->CodeInput($CodeArray['code_base']);
+			}
+			$CodeArray = $this->Generate_String();
+			if($CodeArray['code_pos_num']==$GenerateID){
+				return $CodeArray;
+			}
+		}
 	}
 }
 ?>
