@@ -108,7 +108,7 @@ class UniqueKey {
 	}
 	
 	public function CodeCreateNext(){
-	$code_char_count = $this->CodeType['code_char_count'];
+	
 	$code_char_range = $this->CodeType['code_char_range'];
 	$code_char_range_start = reset($code_char_range);
 	$code_char_range_end = end($code_char_range);
@@ -157,8 +157,7 @@ class UniqueKey {
 		$code_char_count = $this->CodeType['code_char_count'];
 		$code_char_range = $this->CodeType['code_char_range'];
 		$code_char_range_start = reset($code_char_range);
-		$code_char_range_end = end($code_char_range);
-		//print_r($code_char_range);
+		
 		$this->code_char_base = [];
 		if($this->run_default_code){
 			for($n=1;$this->default_code_length>=$n;$n++){
