@@ -60,11 +60,11 @@ class UniqueKey {
 		$CodeTypes[1]['code_char_range'] = range('A','Z');
 		$CodeTypes[2]['code_char_range'] = range('a','z');
 		$CodeTypes[3]['code_char_range'] = array_merge(range('A','Z'), range('a','z'));
-		$CodeTypes[4]['code_char_range'] = range('0','9');
-		$CodeTypes[5]['code_char_range'] = array_merge(range('A','Z'), range('0','9'));
-		$CodeTypes[6]['code_char_range'] = array_merge(range('a','z'), range('0','9'));
-		$CodeTypes[7]['code_char_range'] = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-		$CodeTypes[8]['code_char_range'] = array_merge(range('A','Z'), range('a','z'), range('0','9'),array('-','_'));
+		$CodeTypes[4]['code_char_range'] = range(0,9);
+		$CodeTypes[5]['code_char_range'] = array_merge(range('A','Z'), range(0,9));
+		$CodeTypes[6]['code_char_range'] = array_merge(range('a','z'), range(0,9));
+		$CodeTypes[7]['code_char_range'] = array_merge(range('A','Z'), range('a','z'), range(0,9));
+		$CodeTypes[8]['code_char_range'] = array_merge(range('A','Z'), range('a','z'), range(0,9),array('-','_'));
 		
 		$CodeTypes[1]['code_char_count'] = count($CodeTypes[1]['code_char_range']);
 		$CodeTypes[2]['code_char_count'] = count($CodeTypes[2]['code_char_range']);
@@ -97,6 +97,16 @@ class UniqueKey {
 		}
 	}
 	
+	public function Search($Value,$In_Array){
+		foreach($In_Array AS $KeyNumber=>$KeyString){
+			if("$KeyString"=="$Value"){
+				return $KeyNumber;
+				break;
+			}
+			
+		}
+	}
+	
 	public function CodeCreateNext(){
 	$code_char_count = $this->CodeType['code_char_count'];
 	$code_char_range = $this->CodeType['code_char_range'];
@@ -108,16 +118,18 @@ class UniqueKey {
 	// Starts a search for the next incrementable character, ie, other than code_char_range_end
 	// Note that it starts from the last character for the first character
 		for($i = count($code_str_split)-1;$i>-1;$i--){
-			if($code_str_split[$i] == $code_char_range_end){
+			if("$code_str_split[$i]" == "$code_char_range_end"){
 				if($i==0){
 				// If it is equal to code_char_range_end and is the first character, then it increases the length and zera
-				$code_str_split = array_fill(0,count($code_str_split) + 1,0);
+				$code_str_split = array_fill(0,count($code_str_split) + 1,$code_char_range_start);
 				return $code_str_split;
 				}else{
-					if($code_str_split[$i -1] != $code_char_range_end){
+					$n = $i-1;
+					$code_str_pos = $this->Search("$code_str_split[$n]",$code_char_range);
+					if("$code_str_split[$n]" != "$code_char_range_end"){
 					// If the previous character is different from code_char_range_end, it increments it and clears the current and subsequent characters
 					// If the previous character is the first one, it also works, because it increments it and zeroes the others
-					$code_str_split[$i -1] = $code_char_range[array_search($code_str_split[$i -1],$code_char_range) + 1];
+					$code_str_split[$n] = $code_char_range[$code_str_pos + 1];
 						for($j = $i; $j < count($code_str_split); $j++){
 							$code_str_split[$j] = $code_char_range_start;
 						}
@@ -125,12 +137,13 @@ class UniqueKey {
 					}
 				}
 			}else{
+				$code_str_pos = $this->Search("$code_str_split[$i]",$code_char_range);
 			// calculates the next character, ie, increments the current character
-			$code_str_split[$i] = $code_char_range[array_search($code_str_split[$i],$code_char_range) + 1];
+			$code_str_split[$i] = $code_char_range[$code_str_pos + 1];
 				if($i == 0){
 					// If it is the first character, it means that the others are code_char_range_end
 					// That is, he zeroes them
-					$novo_array = array_fill(0,count($code_str_split),0);
+					$novo_array = array_fill(0,count($code_str_split),$code_char_range_start);
 					$novo_array[0] = $code_str_split[$i];
 					$code_str_split = $novo_array;
 				}
@@ -145,12 +158,12 @@ class UniqueKey {
 		$code_char_range = $this->CodeType['code_char_range'];
 		$code_char_range_start = reset($code_char_range);
 		$code_char_range_end = end($code_char_range);
-		
+		//print_r($code_char_range);
 		$this->code_char_base = [];
 		if($this->run_default_code){
 			for($n=1;$this->default_code_length>=$n;$n++){
 				if($this->run_random_code){
-					$this->code_char_base[] = $code_char_range[rand(0,($code_char_count-1))];
+					$this->code_char_base[] = $code_char_range[mt_rand(0,($code_char_count-1))];
 				}else{
 					$this->code_char_base[] = $code_char_range_start;
 				}
@@ -188,6 +201,7 @@ class UniqueKey {
 					'code_pos_num'=>$this->code_pos_num,
 					'code_time'=>$this->CodeType['code_generated_time'],
 					'code_message'=>'',
+					'code_style'=>$this->CodeType['code_style'],
 					'code_name'=>$this->CodeType['code_name'],
 					'code_type'=>$this->default_code_type,
 					'code_max_type'=>$this->code_max_type,
@@ -197,13 +211,10 @@ class UniqueKey {
 	
 	public function Generate_ID($GenerateID){
 		is_numeric($GenerateID) OR die('The ID must be numberic!');
+		$this->CodeInput();
 		for($i=1;$i<=$GenerateID;$i++){
-			if($i==1){
-				$this->CodeInput();
-			}else{
-				$this->CodeInput($CodeArray['code_base']);
-			}
 			$CodeArray = $this->Generate_String();
+			$this->CodeInput($CodeArray['code_base']);
 			if($GenerateID>$CodeArray['code_max_number']){
 				$Minus_How_Much = ($GenerateID-$CodeArray['code_max_number']);
 				$CorrectID = ($GenerateID-$Minus_How_Much);
@@ -213,7 +224,7 @@ class UniqueKey {
 				}
 			}else{
 				if($CodeArray['code_pos_num']==$GenerateID){
-						return $CodeArray;
+					return $CodeArray;
 				}
 			}
 		}
