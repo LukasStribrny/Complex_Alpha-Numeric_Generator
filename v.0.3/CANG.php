@@ -39,14 +39,14 @@ class CANG {
 		$CodeTypes[7]['code_name'] = '[A-Z,a-z,0-9]';
 		$CodeTypes[8]['code_name'] = '[A-Z,a-z,0-9,-_]';
 		
-		$CodeTypes[1]['code_style'] = 'Alphabetical -> Simple:Capital letters';
-		$CodeTypes[2]['code_style'] = 'Alphabetical -> Simple:Small letters';
-		$CodeTypes[3]['code_style'] = 'Alphabetical -> Combi:Capital and small letters';
-		$CodeTypes[4]['code_style'] = 'Numerical -> Simple';
-		$CodeTypes[5]['code_style'] = 'Alphabetical and Numerical -> Simple:Capital letters(Megaupload.com)';
-		$CodeTypes[6]['code_style'] = 'Alphabetical and Numerical -> Simple:Small letters';
-		$CodeTypes[7]['code_style'] = 'Alphabetical and Numerical -> Combi:Capital and small letters';
-		$CodeTypes[8]['code_style'] = 'Alphabetical and Numerical -> Combi:Capital and small letters plus special chars(Youtube.com)';
+		$CodeTypes[1]['code_description'] = 'Alphabetical -> Simple:Capital letters';
+		$CodeTypes[2]['code_description'] = 'Alphabetical -> Simple:Small letters';
+		$CodeTypes[3]['code_description'] = 'Alphabetical -> Combi:Capital and small letters';
+		$CodeTypes[4]['code_description'] = 'Numerical -> Simple';
+		$CodeTypes[5]['code_description'] = 'Alphabetical and Numerical -> Simple:Capital letters(Megaupload.com)';
+		$CodeTypes[6]['code_description'] = 'Alphabetical and Numerical -> Simple:Small letters';
+		$CodeTypes[7]['code_description'] = 'Alphabetical and Numerical -> Combi:Capital and small letters';
+		$CodeTypes[8]['code_description'] = 'Alphabetical and Numerical -> Combi:Capital and small letters plus special chars(Youtube.com)';
 		
 		$CodeTypes[1]['code_generated_time'] = microtime(TRUE);
 		$CodeTypes[2]['code_generated_time'] = microtime(TRUE);
@@ -211,8 +211,8 @@ class CANG {
 					'code_pos_num'=>$this->code_pos_num,
 					'code_time'=>$this->CodeType['code_generated_time'],
 					'code_message'=>'is_acurrate',
-					'code_style'=>$this->CodeType['code_style'],
 					'code_name'=>$this->CodeType['code_name'],
+					'code_description'=>$this->CodeType['code_description'],
 					'code_type'=>$this->default_code_type,
 					'code_max_type'=>$this->code_max_type,
 					'code_length'=>$this->default_code_length
@@ -227,8 +227,8 @@ class CANG {
 						'code_pos_num'=>$this->code_pos_num,
 						'code_time'=>$this->CodeType['code_generated_time'],
 						'code_message'=>'is_upper_or_full',
-						'code_style'=>$this->CodeType['code_style'],
 						'code_name'=>$this->CodeType['code_name'],
+						'code_description'=>$this->CodeType['code_description'],
 						'code_type'=>$this->default_code_type,
 						'code_max_type'=>$this->code_max_type,
 						'code_length'=>$this->default_code_length
@@ -243,8 +243,8 @@ class CANG {
 						'code_pos_num'=>$this->code_pos_num,
 						'code_time'=>$this->CodeType['code_generated_time'],
 						'code_message'=>'is_lower',
-						'code_style'=>$this->CodeType['code_style'],
 						'code_name'=>$this->CodeType['code_name'],
+						'code_description'=>$this->CodeType['code_description'],
 						'code_type'=>$this->default_code_type,
 						'code_max_type'=>$this->code_max_type,
 						'code_length'=>$this->default_code_length
