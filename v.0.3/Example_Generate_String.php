@@ -1,14 +1,13 @@
 <?php
-include('UniqueKey.php');
-$UniqueKey = new UniqueKey;
-$UniqueKey->SetLength(8);
-$UniqueKey->SetType(5);
+include('CANG.php');
+$CANG = new CANG;
+$CANG->SetLength(8);
+$CANG->SetType(5);
 
-$UniqueKey->CodeInput();
-$return = $UniqueKey->Generate_String();
-print_r($return);
+$CANG->CodeInput();
+$return[1] = $CANG->Generate_String();
 
-$UniqueKey->CodeInput($return['code_base']);
-$return = $UniqueKey->Generate_String();
+$CANG->CodeInput($return[1]['code_base']);
+$return[] = $CANG->Generate_String();
 print_r($return);
 ?>
