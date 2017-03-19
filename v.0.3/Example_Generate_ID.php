@@ -1,8 +1,8 @@
 <?php
-include('UniqueKey.php');
-$UniqueKey = new UniqueKey;
-$UniqueKey->SetLength(8);
-$UniqueKey->SetType(5);
-$return = $UniqueKey->Generate_ID(249996);//In 30 seconds you should be able to generate the key by this ID
+include('CANG.php');
+$CANG = new CANG;
+$CANG->SetLength(8);
+$CANG->SetType(5);
+$return = $CANG->Generate_ID(249996);//In 30 seconds you should be able to generate the key by this ID
 print_r($return);
 ?>
