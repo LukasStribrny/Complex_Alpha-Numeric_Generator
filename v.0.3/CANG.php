@@ -1,5 +1,5 @@
 <?php
-class UniqueKey {
+class CANG {
 	
 	public $default_code_length = 1;
 	public $default_code_type = 1;
@@ -97,8 +97,9 @@ class UniqueKey {
 		}
 	}
 	
-	public function Search($Value,$In_Array){
-		foreach($In_Array AS $KeyNumber=>$KeyString){
+	public function Search($Value){
+		$code_char_range = $this->CodeType['code_char_range'];
+		foreach($code_char_range AS $KeyNumber=>$KeyString){
 			if("$KeyString"=="$Value"){
 				return $KeyNumber;
 				break;
@@ -121,15 +122,19 @@ class UniqueKey {
 			if("$code_str_split[$i]" == "$code_char_range_end"){
 				if($i==0){
 				// If it is equal to code_char_range_end and is the first character, then it increases the length and zera
-				$code_str_split = array_fill(0,count($code_str_split) + 1,$code_char_range_start);
+				$code_str_split = array_fill(0,count($code_str_split) + 1,"$code_char_range_start");
 				return $code_str_split;
 				}else{
 					$n = $i-1;
-					$code_str_pos = $this->Search("$code_str_split[$n]",$code_char_range);
+					$code_str_pos = $this->Search("$code_str_split[$n]")+1;
 					if("$code_str_split[$n]" != "$code_char_range_end"){
 					// If the previous character is different from code_char_range_end, it increments it and clears the current and subsequent characters
 					// If the previous character is the first one, it also works, because it increments it and zeroes the others
-					$code_str_split[$n] = $code_char_range[$code_str_pos + 1];
+					if(empty($code_char_range[$code_str_pos])){
+						$code_str_split[$n] = settype($code_char_range[$code_str_pos],'string');
+					}else{
+						$code_str_split[$n] = $code_char_range[$code_str_pos];
+					}
 						for($j = $i; $j < count($code_str_split); $j++){
 							$code_str_split[$j] = $code_char_range_start;
 						}
@@ -137,13 +142,17 @@ class UniqueKey {
 					}
 				}
 			}else{
-				$code_str_pos = $this->Search("$code_str_split[$i]",$code_char_range);
-			// calculates the next character, ie, increments the current character
-			$code_str_split[$i] = $code_char_range[$code_str_pos + 1];
+				// calculates the next character, ie, increments the current character
+				$code_str_pos = $this->Search("$code_str_split[$i]")+1;
+				if(empty($code_char_range[$code_str_pos])){
+					$code_str_split[$i] = settype($code_char_range[$code_str_pos],'string');
+				}else{
+					$code_str_split[$i] = $code_char_range[$code_str_pos];
+				}
 				if($i == 0){
 					// If it is the first character, it means that the others are code_char_range_end
 					// That is, he zeroes them
-					$novo_array = array_fill(0,count($code_str_split),$code_char_range_start);
+					$novo_array = array_fill(0,count($code_str_split),"$code_char_range_start");
 					$novo_array[0] = $code_str_split[$i];
 					$code_str_split = $novo_array;
 				}
@@ -191,7 +200,9 @@ class UniqueKey {
 		$this->CodeCreate();
 		$this->CodeCountNumber();
 		$code_base = implode($this->code_char_base);
-		return array(
+		
+	if ($this->default_code_length==strlen($code_base)){
+			return array(
 					'code_base'=>$code_base,
 					'code_base_md5'=>md5($code_base),
 					'code_base_sha1'=>sha1($code_base),
@@ -199,13 +210,48 @@ class UniqueKey {
 					'code_max_number'=>$this->CodeType['code_max_number'],
 					'code_pos_num'=>$this->code_pos_num,
 					'code_time'=>$this->CodeType['code_generated_time'],
-					'code_message'=>'',
+					'code_message'=>'is_acurrate',
 					'code_style'=>$this->CodeType['code_style'],
 					'code_name'=>$this->CodeType['code_name'],
 					'code_type'=>$this->default_code_type,
 					'code_max_type'=>$this->code_max_type,
 					'code_length'=>$this->default_code_length
 					);
+		}elseif($this->default_code_length<strlen($code_base)){
+			return array(
+						'code_base'=>$code_base,
+						'code_base_md5'=>md5($code_base),
+						'code_base_sha1'=>sha1($code_base),
+						'code_base64_encode'=>base64_encode($code_base),
+						'code_max_number'=>$this->CodeType['code_max_number'],
+						'code_pos_num'=>$this->code_pos_num,
+						'code_time'=>$this->CodeType['code_generated_time'],
+						'code_message'=>'is_upper_or_full',
+						'code_style'=>$this->CodeType['code_style'],
+						'code_name'=>$this->CodeType['code_name'],
+						'code_type'=>$this->default_code_type,
+						'code_max_type'=>$this->code_max_type,
+						'code_length'=>$this->default_code_length
+						);
+		}else{
+			return array(
+						'code_base'=>$code_base,
+						'code_base_md5'=>md5($code_base),
+						'code_base_sha1'=>sha1($code_base),
+						'code_base64_encode'=>base64_encode($code_base),
+						'code_max_number'=>$this->CodeType['code_max_number'],
+						'code_pos_num'=>$this->code_pos_num,
+						'code_time'=>$this->CodeType['code_generated_time'],
+						'code_message'=>'is_lower',
+						'code_style'=>$this->CodeType['code_style'],
+						'code_name'=>$this->CodeType['code_name'],
+						'code_type'=>$this->default_code_type,
+						'code_max_type'=>$this->code_max_type,
+						'code_length'=>$this->default_code_length
+						);
+		}
+
+		
 	}
 	
 	public function Generate_ID($GenerateID){
