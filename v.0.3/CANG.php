@@ -195,13 +195,9 @@ class CANG {
         $this->code_pos_num = ($number+1);
 	}
 	
-	public function Generate_String(){
-		$this->CodeTypes();
-		$this->CodeCreate();
-		$this->CodeCountNumber();
+	public function CodeArray(){
 		$code_base = implode($this->code_char_base);
-		
-	if ($this->default_code_length==strlen($code_base)){
+	if($this->default_code_length==strlen($code_base)){
 			return array(
 					'code_base'=>$code_base,
 					'code_base_md5'=>md5($code_base),
@@ -250,29 +246,35 @@ class CANG {
 						'code_length'=>$this->default_code_length
 						);
 		}
-
-		
+	}
+	
+	public function Generate_String(){
+		$this->CodeTypes();
+		$this->CodeCreate();
+		$this->CodeCountNumber();
+		return $this->CodeArray();
 	}
 	
 	public function Generate_ID($GenerateID){
 		is_numeric($GenerateID) OR die('The ID must be numberic!');
-		$this->CodeInput();
-		for($i=1;$i<=$GenerateID;$i++){
-			$CodeArray = $this->Generate_String();
-			$this->CodeInput($CodeArray['code_base']);
-			if($GenerateID>$CodeArray['code_max_number']){
-				$Minus_How_Much = ($GenerateID-$CodeArray['code_max_number']);
-				$CorrectID = ($GenerateID-$Minus_How_Much);
-				if($CodeArray['code_pos_num']==$CorrectID){
-					return $CodeArray;
-					break;
-				}
-			}else{
-				if($CodeArray['code_pos_num']==$GenerateID){
-					return $CodeArray;
-				}
-			}
+		$this->CodeTypes();
+		$code_char_count = $this->CodeType['code_char_count'];
+		$code_char_range = $this->CodeType['code_char_range'];
+		
+		$one = 1;
+		if($GenerateID>$this->CodeType['code_max_number']){
+			$code_id = $this->CodeType['code_max_number'] - $one;
+		}else{
+			$code_id = ($GenerateID - $one);
 		}
+		for($length=($this->default_code_length - $one);$length>=0;$length--){
+			$bcpow = bcpow($code_char_count, $length);
+			$possition = floor($code_id / $bcpow);
+			$code_id = $code_id - ($possition * $bcpow);
+			$this->code_char_base[] = $code_char_range[$possition];
+		}
+		$this->CodeCountNumber();
+		return $this->CodeArray();
 	}
 }
 ?>
