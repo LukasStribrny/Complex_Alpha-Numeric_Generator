@@ -263,7 +263,8 @@ class CANG {
 		
 		$one = 1;
 		if($GenerateID>$this->CodeType['code_max_number']){
-			$code_id = $this->CodeType['code_max_number'] - $one;
+			//Perform reset
+			$code_id = ($one - $one);
 		}else{
 			$code_id = ($GenerateID - $one);
 		}
@@ -271,7 +272,7 @@ class CANG {
 			$bcpow = bcpow($code_char_count, $length);
 			$possition = floor($code_id / $bcpow);
 			$code_id = $code_id - ($possition * $bcpow);
-			$this->code_char_base[] = $code_char_range[$possition];
+			$this->code_char_base[$length] = $code_char_range[$possition];
 		}
 		$this->CodeCountNumber();
 		return $this->CodeArray();
