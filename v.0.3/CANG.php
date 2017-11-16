@@ -8,7 +8,12 @@ class CANG {
 	protected $code_max_type = 8;
 	
 	public function __construct(){
-		set_time_limit(0);
+		/*
+		Nothing to do here but if you need to use it with CI must write :
+		class CANG extends CI_Library {}
+		and remove the double back slash below
+		*/
+		//parent::__construct();
 	}
 	
 	public function SetLength($SetLength=FALSE){
