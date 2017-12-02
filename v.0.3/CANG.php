@@ -30,7 +30,12 @@ class CANG {
 	
 	public function CodeCountRange($code_char_range=[]){
 		$count_characters = count($code_char_range);
-		return pow($count_characters, $this->default_code_length);
+		if(function_exists('bcpow')){
+			return bcpow($count_characters, $this->default_code_length);
+		}else{
+			return pow($count_characters, $this->default_code_length);
+		}
+		
 	}
 	
 	public function CodeTypes(){
@@ -274,9 +279,16 @@ class CANG {
 			$code_id = ($GenerateID - $one);
 		}
 		for($length=($this->default_code_length - $one);$length>=0;$length--){
-			$bcpow = bcpow($code_char_count, $length);
-			$possition = floor($code_id / $bcpow);
-			$code_id = $code_id - ($possition * $bcpow);
+			if(function_exists('bcpow')){
+				$bcpow = bcpow($code_char_count, $length);
+				$possition = floor($code_id / $bcpow);
+				$code_id = $code_id - ($possition * $bcpow);
+			}else{
+				$pow = pow($code_char_count, $length);
+				$possition = floor($code_id / $pow);
+				$code_id = $code_id - ($possition * $pow);
+			}
+			
 			$this->code_char_base[$length] = $code_char_range[$possition];
 		}
 		$this->CodeCountNumber();
