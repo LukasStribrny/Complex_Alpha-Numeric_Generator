@@ -5,7 +5,7 @@ class CANG {
 	public $default_code_type = 1;
 	public $run_default_code = TRUE;
 	public $run_random_code = TRUE;
-	protected $code_max_type = 8;
+	public $code_max_type = 8;
 	
 	public function __construct(){
 		/*
