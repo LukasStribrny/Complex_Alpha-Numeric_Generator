@@ -140,11 +140,8 @@ class CANG {
 					if("$code_str_split[$n]" != "$code_char_range_end"){
 					// If the previous character is different from code_char_range_end, it increments it and clears the current and subsequent characters
 					// If the previous character is the first one, it also works, because it increments it and zeroes the others
-					if(empty($code_char_range[$code_str_pos])){
-						$code_str_split[$n] = settype($code_char_range[$code_str_pos],'string');
-					}else{
-						$code_str_split[$n] = $code_char_range[$code_str_pos];
-					}
+					$code_str_split[$n] = $code_char_range[$code_str_pos];
+					
 						for($j = $i; $j < count($code_str_split); $j++){
 							$code_str_split[$j] = $code_char_range_start;
 						}
@@ -154,11 +151,7 @@ class CANG {
 			}else{
 				// calculates the next character, ie, increments the current character
 				$code_str_pos = $this->Search("$code_str_split[$i]")+1;
-				if(empty($code_char_range[$code_str_pos])){
-					$code_str_split[$i] = settype($code_char_range[$code_str_pos],'string');
-				}else{
-					$code_str_split[$i] = $code_char_range[$code_str_pos];
-				}
+				$code_str_split[$i] = $code_char_range[$code_str_pos];
 				if($i == 0){
 					// If it is the first character, it means that the others are code_char_range_end
 					// That is, he zeroes them
