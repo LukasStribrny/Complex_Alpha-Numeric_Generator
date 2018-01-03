@@ -1,5 +1,5 @@
 <?php
-include('CANG.php');
+include_once('CANG.php');
 class MS_G extends CANG {
 	
 	public function __construct(){
